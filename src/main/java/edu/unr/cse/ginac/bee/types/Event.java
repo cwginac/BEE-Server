@@ -10,6 +10,7 @@ public class Event {
     public String severity;
     public String instructions;
     public Timestamp lastUpdate;
+    public boolean inUsersArea;
 
     public List<Route> routes;
     public List<Coordinate> boundaryPoints;

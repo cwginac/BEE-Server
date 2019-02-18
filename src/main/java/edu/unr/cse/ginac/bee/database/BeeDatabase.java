@@ -216,7 +216,7 @@ public class BeeDatabase {
                     "latitude float NOT NULL," +
                     "longitude float NOT NULL," +
                     "route_id varchar(36) NOT NULL," +
-                    "order int NOT NULL," +
+                    "ordinal int NOT NULL," +
                     "PRIMARY KEY (waypoint_id)," +
                     "FOREIGN KEY (route_id)" +
                     " REFERENCES routes(route_id)" +
@@ -373,6 +373,7 @@ public class BeeDatabase {
                 newEvent.severity = results.getString("severity");
                 newEvent.instructions = results.getString("instructions");
                 newEvent.lastUpdate = results.getTimestamp("last_update");
+                newEvent.inUsersArea = true;
 
                 String routes = "SELECT * FROM routes WHERE event_id = \"" + newEvent.eventId + "\"";
                 Statement routeStatement = dbConnection.createStatement();
@@ -385,12 +386,12 @@ public class BeeDatabase {
                     newRoute.status = routeResults.getString("status");
                     newRoute.lastUpdate = routeResults.getTimestamp("last_update");
 
-                    String waypoints = "SELECT * FROM waypoints WHERE route_id = \"" + newRoute.routeId + "\" ORDER BY order";
+                    String waypoints = "SELECT * FROM waypoints WHERE route_id = \"" + newRoute.routeId + "\" ORDER BY ordinal";
                     Statement waypointStatement = dbConnection.createStatement();
                     ResultSet waypointResults = waypointStatement.executeQuery(waypoints);
 
                     while (waypointResults.next()) {
-                        System.out.println("waypoint " + waypointResults.getInt("order"));
+                        System.out.println("waypoint " + waypointResults.getInt("ordinal"));
                         Coordinate newCoordinate = new Coordinate();
                         newCoordinate.latitude = waypointResults.getDouble("latitude");
                         newCoordinate.longitude = waypointResults.getDouble("longitude");

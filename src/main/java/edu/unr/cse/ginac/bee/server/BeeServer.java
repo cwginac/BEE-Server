@@ -42,8 +42,10 @@ public class BeeServer {
 //        return Response.status(200).entity(IOUtils.toString(is)).build();
 
         List<Event> events = database.getAllEvents();
+        System.out.println(events.size());
         ObjectMapper mapper = new ObjectMapper();
-        String response = mapper.writeValueAsString(events);
+        String response = "{\"events\":";
+        response += mapper.writeValueAsString(events) + "}";
 
         return Response.status(200).entity(response).build();
     }
@@ -214,7 +216,7 @@ public class BeeServer {
         Map<String, Object> route = new HashMap<>();
         route.put("route_id", routeId);
         route.put("event_id", eventId);
-        route.put("status", status);
+        route.put("status", "open");
         route.put("last_update", Timestamp.valueOf(LocalDateTime.now()));
 
         String error = database.updateTable("routes", route);
@@ -240,7 +242,7 @@ public class BeeServer {
         waypoint.put("route_id", routeId);
         waypoint.put("latitude", waypointLatitude);
         waypoint.put("longitude", waypointLongitude);
-        waypoint.put("order", order);
+        waypoint.put("ordinal", order);
 
         String error = database.updateTable("waypoints", waypoint);
 
