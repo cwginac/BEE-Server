@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset=utf-8/>
+        <title>BEE: Bettering Emergency Evacuations</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+        <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
+        <script src='https://api.mapbox.com/mapbox.js/plugins/mapbox-directions.js/v0.4.0/mapbox.directions.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/mapbox-directions.js/v0.4.0/mapbox.directions.css' rel='stylesheet' type='text/css' />
+        <style>
+              body { margin:0; padding:0; }
+              #map { position:absolute; left: 0; top:0; bottom:0; width:80%; }
+              .info_pane {position: absolute; top:0; right:0; width:20%}
+              .formfield * {vertical-align: middle; }
+        </style>
+    </head>
+    <body>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.css' rel='stylesheet'/>
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.js'></script>
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
+        <div id='map'></div>
+        <div class='info_pane'></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="scripts/Emergency-Manager.js"></script>
+        <script src="scripts/Types/Event.js"></script>
+        <script src="scripts/Types/BoundaryCoord.js"></script>
+        <script src="scripts/Types/Route.js"></script>
+        <script src="scripts/Types/Waypoint.js"></script>
+        <script src="scripts/UuidUtility.js"></script>
+        <script src="scripts/polyline.js"></script>
+    </body>
+</html>
