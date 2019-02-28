@@ -3,17 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="4f80963c-f10c-45d2-8ef2-2093a4b8bf66" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/bee-web-service.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/bee-web-service.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/bee-web-service/WEB-INF/classes/edu/unr/cse/ginac/bee/database/BeeDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/bee-web-service/WEB-INF/classes/edu/unr/cse/ginac/bee/database/BeeDatabase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/bee-web-service/WEB-INF/classes/edu/unr/cse/ginac/bee/server/BeeServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/bee-web-service/WEB-INF/classes/edu/unr/cse/ginac/bee/server/BeeServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/bee-web-service/WEB-INF/classes/edu/unr/cse/ginac/bee/types/Event.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/bee-web-service/WEB-INF/classes/edu/unr/cse/ginac/bee/types/Event.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/unr/cse/ginac/bee/database/BeeDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/unr/cse/ginac/bee/database/BeeDatabase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/unr/cse/ginac/bee/server/BeeServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/unr/cse/ginac/bee/server/BeeServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/unr/cse/ginac/bee/types/Event.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/unr/cse/ginac/bee/types/Event.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/scripts/Types/Route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/scripts/Types/Route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/scripts/Types/Waypoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/scripts/Types/Waypoint.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -27,15 +22,17 @@
     <session id="485633768">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="8" />
+          <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.56" value="1" />
+          <entry key="project.open.time.58" value="1" />
           <entry key="project.open.time.62" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.85" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -68,7 +65,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="181" />
-          <entry key="JAVA" value="9689" />
+          <entry key="JAVA" value="9958" />
           <entry key="JSON" value="29" />
           <entry key="JSP" value="940" />
           <entry key="JavaScript" value="115" />
@@ -88,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="230" column="50" lean-forward="true" selection-start-line="230" selection-start-column="50" selection-end-line="230" selection-end-column="50" />
+            <state relative-caret-position="15">
+              <caret line="244" column="70" lean-forward="true" selection-start-line="244" selection-start-column="70" selection-end-line="244" selection-end-column="70" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -103,8 +100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Route.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+            <state relative-caret-position="195">
+              <caret line="14" column="17" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -115,8 +112,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="21" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="21" />
+            <state relative-caret-position="255">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
             </state>
           </provider>
         </entry>
@@ -124,17 +121,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/response.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="128" lean-forward="true" selection-end-line="128" />
+            <state relative-caret-position="1920">
+              <caret line="128" selection-end-line="128" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="375" column="44" selection-start-line="375" selection-start-column="44" selection-end-line="375" selection-end-column="44" />
+            <state relative-caret-position="2232">
+              <caret line="378" column="46" selection-start-line="378" selection-start-column="46" selection-end-line="378" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -143,7 +140,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -154,17 +151,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="83" selection-start-line="83" selection-end-line="88" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="829">
-              <caret line="135" column="22" selection-start-line="135" selection-start-column="22" selection-end-line="135" selection-end-column="22" />
+            <state relative-caret-position="575">
+              <caret line="167" column="34" selection-start-line="167" selection-start-column="34" selection-end-line="167" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -186,9 +174,11 @@
       <find>filter</find>
       <find>drop</find>
       <find>Event</find>
-      <find>waypoint</find>
       <find>order</find>
       <find>status</find>
+      <find>event</find>
+      <find>waypoint</find>
+      <find>Boolean</find>
     </findStrings>
     <replaceStrings>
       <replace>ordinal</replace>
@@ -206,16 +196,16 @@
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Route.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/index.jsp" />
-        <option value="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/CORSFilter.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/debug.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/index.html" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeData.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" />
+        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" />
       </list>
     </option>
   </component>
@@ -248,8 +238,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1712" />
-    <option name="y" value="57" />
+    <option name="x" value="78" />
+    <option name="y" value="27" />
     <option name="width" value="1670" />
     <option name="height" value="952" />
   </component>
@@ -259,7 +249,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -364,10 +353,11 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550464043181" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550465043961" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -504,10 +494,10 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1712" y="57" width="1670" height="952" extended-state="0" />
+    <frame x="78" y="27" width="1670" height="952" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23218673" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23710074" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -532,7 +522,7 @@
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="7" visible="true" weight="0.18120393" />
+      <window_info anchor="right" id="Maven Projects" order="7" visible="true" weight="0.12776412" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -580,13 +570,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../BEE/response.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../BEE/response.json" />
     <entry file="jar://$MAVEN_REPOSITORY$/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar!/javax/ws/rs/core/Response.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1470">
@@ -594,26 +578,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/tomcat/conf/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-826">
-          <caret line="3481" column="34" selection-start-line="3481" selection-start-column="34" selection-end-line="3481" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/CORSFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="8" lean-forward="true" selection-start-column="8" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/scripts/Event">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/target/tomcat/conf/web.xml" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/CORSFilter.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/scripts/Event" />
     <entry file="file://$PROJECT_DIR$/src/main/webapp/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -628,17 +595,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="83" selection-start-line="83" selection-end-line="88" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeData.java" />
     <entry file="file://$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="829">
-          <caret line="135" column="22" selection-start-line="135" selection-start-column="22" selection-end-line="135" selection-end-column="22" />
+        <state relative-caret-position="251">
+          <caret line="190" column="11" selection-start-line="190" selection-start-column="6" selection-end-line="190" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -651,59 +612,59 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/response.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="128" lean-forward="true" selection-end-line="128" />
+        <state relative-caret-position="1920">
+          <caret line="128" selection-end-line="128" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Route.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+        <state relative-caret-position="575">
+          <caret line="167" column="34" selection-start-line="167" selection-start-column="34" selection-end-line="167" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="244" column="70" lean-forward="true" selection-start-line="244" selection-start-column="70" selection-end-line="244" selection-end-column="70" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeData.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Route.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="7" lean-forward="true" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="21" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="21" />
+        <state relative-caret-position="195">
+          <caret line="14" column="17" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="375" column="44" selection-start-line="375" selection-start-column="44" selection-end-line="375" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="230" column="50" lean-forward="true" selection-start-line="230" selection-start-column="50" selection-end-line="230" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="2232">
+          <caret line="378" column="46" selection-start-line="378" selection-start-column="46" selection-end-line="378" selection-end-column="46" />
         </state>
       </provider>
     </entry>

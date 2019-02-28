@@ -1,11 +1,9 @@
 package edu.unr.cse.ginac.bee.server;
 
-import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.unr.cse.ginac.bee.database.BeeDatabase;
 import edu.unr.cse.ginac.bee.types.Event;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -37,9 +35,6 @@ public class BeeServer {
     @Path("/get-events")
     public Response getEvents(@QueryParam("id") String id) throws IOException {
         System.out.println("Getting Events for: " + id);
-//        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-//        InputStream is = classloader.getResourceAsStream("response.json");
-//        return Response.status(200).entity(IOUtils.toString(is)).build();
 
         List<Event> events = database.getAllEvents();
         System.out.println(events.size());
@@ -229,8 +224,25 @@ public class BeeServer {
 
     @POST
     @Consumes("application/x-www-form-urlencoded")
+    @Path("/e-m/remove-route")
+    public Response remove(@FormParam("route_id") String routeId) {
+        System.out.println("Removing Route: " + routeId);
+
+        Map<String, Object> route = new HashMap<>();
+        route.put("route_id", routeId);
+
+        String error = database.deleteFromTable("routes", route);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
     @Path("/e-m/add-waypoint")
-    public Response addWaypoints(@FormParam("route_id") String routeId,
+    public Response addWaypoint(@FormParam("route_id") String routeId,
                                  @FormParam("waypoint_id") String waypointId,
                                  @FormParam("latitude") Double waypointLatitude,
                                  @FormParam("longitude") Double waypointLongitude,
@@ -245,6 +257,23 @@ public class BeeServer {
         waypoint.put("ordinal", order);
 
         String error = database.updateTable("waypoints", waypoint);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("/e-m/remove-waypoint")
+    public Response removeWaypoint(@FormParam("waypoint_id") String waypointId) {
+        System.out.println("Removing Waypoint: " + waypointId);
+
+        Map<String, Object> waypoint = new HashMap<>();
+        waypoint.put("waypoint_id", waypointId);
+
+        String error = database.deleteFromTable("waypoints", waypoint);
 
         if (error != null) {
             return Response.status(500).entity(error).build();

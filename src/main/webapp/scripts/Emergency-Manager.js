@@ -29,7 +29,6 @@ map.on('draw:edited', showPolygonAreaEdited);
 
 var layers = {};
 
-
 var colors = {
   "order": "#A00500",
   "warning": "#F3AF22"
@@ -39,6 +38,12 @@ function showPolygonAreaEdited(e) {
   e.layers.eachLayer(function (layer) {
     showPolygonArea({ layer: layer });
   });
+}
+
+// Calls to BEE server will fail if running locally.  Determine if running locally, and if so, block transmit data
+var local = false;
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.hostname === "") {
+  local = true;
 }
 
 /**
@@ -54,6 +59,54 @@ function addOjbectToMap(drawing) {
   else if (type === "polyline") {
     addPolyline(drawing);
   }
+  else if (type === "marker") {
+    addLocation(drawing);
+  }
+}
+
+/**
+ * Adds the marker (location) to our database and local objects, also draws the marker on the map.
+ * @param {Event from Leaflet Draw Event} marker 
+ */
+function addLocation(marker) {
+  var location = new BEELocation();
+  
+  location.latitude = marker.layer._latlng.lat;
+  location.longitude = marker.layer._latlng.lng;
+
+  drawLocation(location);
+  
+  if(!local) {
+    location.transmitData();
+  }
+}
+
+/**
+ * Draws the location on the map, with the correct icon for its type.
+ * @param {BEELocation} location 
+ */
+function drawLocation(location) {
+  var myIcon = L.icon({
+    iconUrl: "location_icons/" + location.type + ".png",
+    iconSize:     [30, 30]
+  });
+  
+  layers[location.location_id] = L.marker([location.latitude, location.longitude], {icon: myIcon});
+  layers[location.location_id].addTo(map);
+
+  layers[location.location_id].on('click', function (e) {
+    displayLocation(location);
+  });
+}
+
+/**
+ * Updates the location on the map.
+ * @param {BEELocation} location 
+ */
+function updateLocation(location) {
+  map.removeLayer(layers[location.location_id]);
+
+  drawLocation(location);
 }
 
 /**
@@ -83,6 +136,7 @@ function addPolyline(line) {
   // Setup our listener to process completed requests
   XHR.onload = function () {
     if (XHR.status >= 200 && XHR.status < 300) {
+      updateRoute(route, JSON.parse(XHR.responseText));
       drawRoute(route, JSON.parse(XHR.responseText), activeEvent);
     } else {
       // Something happened.
@@ -93,13 +147,16 @@ function addPolyline(line) {
   // Finally, send our data.
   XHR.send();
 
-  activeEvent.transmitData();
+  if (!local) {
+    activeEvent.transmitData();
+  }
 }
 
 /**
  * Draw the navigation route from the Mapbox API.
- * @param {String} route_id - the id of the route being drawn.
- * @param {String - response from Mapbox API} directions - the actual directions from the Mapbox API.
+ * @param {Route} route object that holds the route.
+ * @param {Json Object} directions object that holds the response from the Mapbox API.
+ * @param {Event} event object that holds the parent event that this route is a part of.
  */
 function drawRoute(route, directions, event) {
   // Decode the GeoJSON into encoded polyline, then decode that.
@@ -112,16 +169,60 @@ function drawRoute(route, directions, event) {
 
   layers[route.route_id].on('click', function (e) {
     displayEvent(event);
+    displayRoute(route, event);
   });
 
-  decoded.forEach(function (element, index) {
-    var waypoint = new Waypoint(route.route_id, index);
-    waypoint.latitude = element[0];
-    waypoint.longitude = element[1];
+  route.checkpoints.forEach(function (element) {
+    var myIcon = L.icon({
+      iconUrl: "waypoint_icons/" + (element.order + 1) + ".png",
+      iconRetinaUrl: "waypoint_icons/" + (element.order + 1) + "@2x.png",
+    });
     
-    route.waypoints.push(waypoint);
+    layers[element.waypoint_id] = L.marker([element.latitude, element.longitude], {icon: myIcon});
+    layers[element.waypoint_id].addTo(map);
+  });
+}
 
-    waypoint.transmitData();
+/**
+ * Updates the route with the information held in directions (response from the Mapbox Navigation API).
+ * @param {Route} route object that holds the route.
+ * @param {Json Object} directions object that holds the response from the Mapbox API.
+ */
+function updateRoute(route, directions) {
+  if (!local) {
+    route.waypoints.forEach(function (element) {
+      element.removeFromDatabase();
+    });
+  }
+
+  route.waypoints = [];
+  directions["routes"][0]["geometry"]["coordinates"].forEach(function (element, index) {
+    var waypoint = new Waypoint(route.route_id, index);
+
+    waypoint.longitude = element[0];
+    waypoint.latitude = element[1];
+
+    route.waypoints.push(waypoint);
+  });
+
+  while (route.waypoints.length > 24) {
+    route.waypoints.splice(Math.floor(Math.random() * route.waypoints.length), 1);
+  }
+
+  route.waypoints.forEach(function (element, index) {
+    element.order = index;
+    if (!local) {
+      element.transmitData();
+    }
+  });
+
+  directions["waypoints"].forEach(function (element, index) {
+    var waypoint = new Waypoint(route.route_id, index);
+
+    waypoint.longitude = element["location"][0];
+    waypoint.latitude = element["location"][1];
+
+    route.checkpoints.push(waypoint);
   });
 }
 
@@ -154,7 +255,9 @@ function addZone(zone) {
 
   // Update the zone, then send the information to the server.
   updateZone(event);
-  event.transmitData()
+  if (!local) {
+    event.transmitData();
+  }
 }
 
 /**
@@ -194,10 +297,7 @@ function displayEvent(event) {
   showEvent += "<textarea rows='20' cols='50' id='instructions'></textarea>";
   showEvent += "</p>";
 
-  showEvent += "<p>";
-  event.routes.forEach(function (element, index) {
-    showEvent += "Route " + (index + 1) + "<br/>"
-  });
+  showEvent += "<p id='routeInfo'>";
   showEvent += "</p>";
 
   $("div.info_pane").html(showEvent);
@@ -205,16 +305,114 @@ function displayEvent(event) {
   $("select[id=severity]").val(event.severity).change().change(function () {
     event.severity = $("select[id=severity]").val();
     updateZone(event);
-    event.transmitData()
+    if (!local) { 
+      event.transmitData(); 
+    }
   });
   $("#type").val(event.type).change().change(function () {
     event.type = $("select[id=type]").val();
-    event.transmitData()
+    if (!local) { 
+      event.transmitData(); 
+    }
   });
 
   $("#instructions").val(event.instructions).change(function () {
     event.instructions = $("textarea[id=instructions]").val();
-    event.transmitData()
+    if (!local) { 
+      event.transmitData(); 
+    }
   });
 }
+
+/**
+ * Displays the route in the side bar.
+ * @param {Route} route 
+ * @param {BeeEvent} event 
+ */
+function displayRoute(route, event) {
+  var showRoute = "Route ID: " + route.route_id;
+
+  route.checkpoints.forEach(function (element, index) {
+    showRoute += "\tWaypoint " + (index + 1) + ": " + element.latitude + ", " + element.longitude + "<br/>";
+  });
+
+  showRoute += "<p>";
+  showRoute += "Use 'Delete This Route' below to redraw or remove this route.<br/>";
+  showRoute += "<button type='button' id='deleteRoute'>Delete This Route</button>";
+  $("#routeInfo").html(showRoute);
+
+  $("#deleteRoute").click(function () {
+    // Remove this route from the event.
+    event.routes.forEach(function(element, index) {
+      if (element.route_id == route.route_id) {
+        event.routes.splice(index, 1);
+      }
+    });
+
+    if (!local) {
+      route.removeFromDatabase();
+    }
+
+    route.checkpoints.forEach(function(element) {
+      map.removeLayer(layers[element.waypoint_id]);
+    });
+
+    map.removeLayer(layers[route.route_id]);
+    $("#routeInfo").html("");
+  });
+}
+
+/**
+ * Displays the location in the sidebar.
+ * @param {BEELocation} location 
+ */
+function displayLocation(location) {
+  var showLocation = "Location ID: " + location.location_id;
+  showLocation += "<br/>"
+  showLocation += "Name: <input type='text' id='locationName'><br/>";
+  showLocation += "Type: ";
+  showLocation += "<select id='locationType'>";
+  showLocation += "<option value='fire'>Fire</option>";
+  showLocation += "<option value='hospital'>Hospital</option>";
+  showLocation += "<option value='hurricane'>Hurricane</option>";
+  showLocation += "<option value='information'>Information</option>";
+  showLocation += "<option value='largeAnimalShelter'>Large Animal Shelter</option>";
+  showLocation += "<option value='other'>Other</option>";
+  showLocation += "<option value='police'>Police</option>";
+  showLocation += "<option value='roadBlocked'>Road Blocked</option>";
+  showLocation += "<option value='humanShelter'>Shelter</option>";
+  showLocation += "<option value='smallAnimalShelter'>Small Animal Shelter</option>";
+  showLocation += "<option value='tropicalStorm'>Tropical Storm</option>";
+  showLocation += "</select><br/>";
+  showLocation += "<p class='formfield'>";
+  showLocation += "<label for='info'>Information:</label>";
+  showLocation += "<textarea rows='20' cols='50' id='info'></textarea>";
+  showLocation += "</p>";
+
+  $("div.info_pane").html(showLocation);
+
+  $("select[id=locationType]").val(location.type).change().change(function () {
+    location.type = $("select[id=locationType]").val();
+    updateLocation(location);
+    if (!local) { 
+      location.transmitData(); 
+    }
+  });
+
+  $("input[id=locationName]").val(location.name).change().change(function () {
+    location.name = $("input[id=locationName]").val();
+    updateLocation(location);
+    if (!local) { 
+      location.transmitData(); 
+    }
+  })
+
+  $("#info").val(location.info).change(function () {
+    location.info = $("textarea[id=info]").val();
+    if (!local) { 
+      location.transmitData(); 
+    }
+  });
+}
+
 

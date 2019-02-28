@@ -353,6 +353,40 @@ public class BeeDatabase {
         }
     }
 
+    public String deleteFromTable(String tableName, Map<String, Object> parameters) {
+        String condition = "";
+
+        for (Map.Entry entry: parameters.entrySet()) {
+            condition += entry.getKey() + "=";
+
+            if (entry.getValue().getClass() == String.class) {
+                condition += "\"" + entry.getValue() + "\"";
+            }
+            else if (entry.getValue().getClass() == Timestamp.class) {
+                condition += "'" + entry.getValue() + "'";
+            }
+            else {
+                condition += entry.getValue();
+            }
+        }
+
+        String deleteString = "DELETE FROM " + tableName + " WHERE " + condition;
+
+        System.out.println(deleteString);
+
+        try {
+            Statement addStatement = dbConnection.createStatement();
+            addStatement.addBatch(deleteString);
+            addStatement.executeBatch();
+            addStatement.close();
+
+            return null;
+        }
+        catch (Exception ex) {
+            System.out.println(ex.toString());
+            return ex.getLocalizedMessage();
+        }
+    }
 
     public List<Event> getAllEvents() {
         System.out.println("Getting Events.");

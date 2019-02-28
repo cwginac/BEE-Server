@@ -148,39 +148,39 @@
                 </execution>
             </executions>
         </plugin>
-        <plugin>
-            <groupId>org.apache.tomcat.maven</groupId>
-            <artifactId>tomcat7-maven-plugin</artifactId>
-            <version>2.2</version>
-            <configuration>
-                <url>http://localhost:8080/manager</url>
-                <server>localhost</server>
-                <path>/${project.build.finalName}</path>
-                <contextFile>${project.basedir}/src/test/tomcat7-maven-plugin/context.xml</contextFile>
-                <systemProperties>
-                    <tutorial.dynamodb.local-endpoint>true</tutorial.dynamodb.local-endpoint>
-                </systemProperties>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>start-tomcat</id>
-                    <phase>pre-integration-test</phase>
-                    <goals>
-                        <goal>run-war</goal>
-                    </goals>
-                    <configuration>
-                        <fork>true</fork>
-                    </configuration>
-                </execution>
-                <execution>
-                    <id>stop-tomcat</id>
-                    <phase>post-integration-test</phase>
-                    <goals>
-                        <goal>shutdown</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+        <!--<plugin>-->
+            <!--<groupId>org.apache.tomcat.maven</groupId>-->
+            <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
+            <!--<version>2.2</version>-->
+            <!--<configuration>-->
+                <!--<url>http://localhost:8080/manager</url>-->
+                <!--<server>localhost</server>-->
+                <!--<path>/${project.build.finalName}</path>-->
+                <!--<contextFile>${project.basedir}/src/test/tomcat7-maven-plugin/context.xml</contextFile>-->
+                <!--<systemProperties>-->
+                    <!--<tutorial.dynamodb.local-endpoint>true</tutorial.dynamodb.local-endpoint>-->
+                <!--</systemProperties>-->
+            <!--</configuration>-->
+            <!--<executions>-->
+                <!--<execution>-->
+                    <!--<id>start-tomcat</id>-->
+                    <!--<phase>pre-integration-test</phase>-->
+                    <!--<goals>-->
+                        <!--<goal>run-war</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                        <!--<fork>true</fork>-->
+                    <!--</configuration>-->
+                <!--</execution>-->
+                <!--<execution>-->
+                    <!--<id>stop-tomcat</id>-->
+                    <!--<phase>post-integration-test</phase>-->
+                    <!--<goals>-->
+                        <!--<goal>shutdown</goal>-->
+                    <!--</goals>-->
+                <!--</execution>-->
+            <!--</executions>-->
+        <!--</plugin>-->
     </plugins>
 </build>
 </project>
