@@ -1,9 +1,10 @@
-function Waypoint(route_id, order) {
+function Waypoint(route_id, order, checkpoint) {
     this.waypoint_id = UuidUtility.create_UUID();
     this.route_id = route_id;
     this.latitude;
     this.longitude;
     this.order = order;
+    this.checkpoint = checkpoint;
 
     this.transmitData = function () {
         var waypoint = {
@@ -11,7 +12,8 @@ function Waypoint(route_id, order) {
             route_id: this.route_id,
             latitude: this.latitude,
             longitude: this.longitude,
-            order: this.order
+            ordinal: this.order,
+            checkpoint: this.checkpoint
         }
 
         var XHR = new XMLHttpRequest();

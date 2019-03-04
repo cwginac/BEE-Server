@@ -9,7 +9,7 @@ public class Route {
     public String status;
     public Timestamp lastUpdate;
 
-    public List<Coordinate> waypoints;
+    public List<Waypoint> waypoints;
 
     public Route() {
         waypoints = new ArrayList<>();

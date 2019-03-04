@@ -4,7 +4,7 @@ function BEELocation() {
     this.name = "";
     this.latitude;
     this.longitude;
-    this.info
+    this.info = "";
 
     this.transmitData = function () {
         var location = {
@@ -22,7 +22,7 @@ function BEELocation() {
         var name;
 
         // Turn the data object into an array of URL-encoded key/value pairs.
-        for (name in event) {
+        for (name in location) {
             urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(location[name]));
         }
 

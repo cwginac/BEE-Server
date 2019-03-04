@@ -193,11 +193,15 @@ function updateRoute(route, directions) {
     route.waypoints.forEach(function (element) {
       element.removeFromDatabase();
     });
+
+    route.checkpoints.forEach(function (element) {
+      element.removeFromDatabase();
+    });
   }
 
   route.waypoints = [];
   directions["routes"][0]["geometry"]["coordinates"].forEach(function (element, index) {
-    var waypoint = new Waypoint(route.route_id, index);
+    var waypoint = new Waypoint(route.route_id, index, false);
 
     waypoint.longitude = element[0];
     waypoint.latitude = element[1];
@@ -216,13 +220,20 @@ function updateRoute(route, directions) {
     }
   });
 
+  route.checkpoints = []
   directions["waypoints"].forEach(function (element, index) {
-    var waypoint = new Waypoint(route.route_id, index);
+    var waypoint = new Waypoint(route.route_id, index, true);
 
     waypoint.longitude = element["location"][0];
     waypoint.latitude = element["location"][1];
 
     route.checkpoints.push(waypoint);
+  });
+
+  route.checkpoints.forEach(function (element) {
+    if (!local) {
+      element.transmitData();
+    }
   });
 }
 
@@ -239,8 +250,8 @@ function addZone(zone) {
   event.instructions = "class based events!"
 
   // Add boundary coordinates
-  zone.layer.editing.latlngs[0][0].forEach(function (element) {
-    var boundary = new BoundaryCoord(event.event_id);
+  zone.layer.editing.latlngs[0][0].forEach(function (element, index) {
+    var boundary = new BoundaryCoord(event.event_id, index);
     boundary.latitude = element.lat;
     boundary.longitude = element.lng;
 

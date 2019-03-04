@@ -3,6 +3,7 @@ package edu.unr.cse.ginac.bee.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.unr.cse.ginac.bee.database.BeeDatabase;
 import edu.unr.cse.ginac.bee.types.Event;
+import edu.unr.cse.ginac.bee.types.Location;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -41,6 +42,21 @@ public class BeeServer {
         ObjectMapper mapper = new ObjectMapper();
         String response = "{\"events\":";
         response += mapper.writeValueAsString(events) + "}";
+
+        return Response.status(200).entity(response).build();
+    }
+
+    @GET
+    @Produces("text/json")
+    @Path("/get-locations")
+    public Response getLocations(@QueryParam("id") String id) throws IOException {
+        System.out.println("Getting locations for: " + id);
+
+        List<Location> locations = database.getAllLocations();
+        System.out.println(locations.size());
+        ObjectMapper mapper = new ObjectMapper();
+        String response = "{\"locations\":";
+        response += mapper.writeValueAsString(locations) + "}";
 
         return Response.status(200).entity(response).build();
     }
@@ -108,8 +124,8 @@ public class BeeServer {
     @Consumes("application/x-www-form-urlencoded")
     @Path("/evacuation-safe")
     public Response evacuationSafe(@FormParam("userId") String userId,
-                                             @FormParam("evacId") String evacId,
-                                             @FormParam("safe") boolean safe) {
+                                   @FormParam("evacId") String evacId,
+                                   @FormParam("safe") boolean safe) {
         System.out.println("User: " + userId + " marked safe for evacuation: " + evacId);
 
         Map<String, Object> parameters = new HashMap<>();
@@ -148,10 +164,10 @@ public class BeeServer {
     @Consumes("application/x-www-form-urlencoded")
     @Path("/report")
     public Response report(@FormParam("userId") String userId,
-                            @FormParam("evacId") String evacId,
-                            @FormParam("type") String type,
-                            @FormParam("latitude") double latitude,
-                            @FormParam("longitude") double longitude) {
+                           @FormParam("evacId") String evacId,
+                           @FormParam("type") String type,
+                           @FormParam("latitude") double latitude,
+                           @FormParam("longitude") double longitude) {
 
 
         return Response.status(200).build();
@@ -183,15 +199,17 @@ public class BeeServer {
     @Consumes("application/x-www-form-urlencoded")
     @Path("/e-m/add-boundary")
     public Response addBoundary(@FormParam("event_id") String eventId,
-                                  @FormParam("bound_coord_id") String boundaryIds,
-                                  @FormParam("latitude") Double boundaryLatitude,
-                                  @FormParam("longitude") Double boundaryLongitude) {
+                                @FormParam("bound_coord_id") String boundaryIds,
+                                @FormParam("latitude") Double boundaryLatitude,
+                                @FormParam("longitude") Double boundaryLongitude,
+                                @FormParam("ordinal") Integer ordinal) {
         System.out.println("Adding Boundary: " + eventId);
         Map<String, Object> boundary_coordinate = new HashMap<>();
         boundary_coordinate.put("bound_coord_id", boundaryIds);
         boundary_coordinate.put("event_id", eventId);
         boundary_coordinate.put("latitude", boundaryLatitude);
         boundary_coordinate.put("longitude", boundaryLongitude);
+        boundary_coordinate.put("ordinal", ordinal);
         String error = database.updateTable("bound_coords", boundary_coordinate);
 
         if (error != null) {
@@ -243,10 +261,11 @@ public class BeeServer {
     @Consumes("application/x-www-form-urlencoded")
     @Path("/e-m/add-waypoint")
     public Response addWaypoint(@FormParam("route_id") String routeId,
-                                 @FormParam("waypoint_id") String waypointId,
-                                 @FormParam("latitude") Double waypointLatitude,
-                                 @FormParam("longitude") Double waypointLongitude,
-                                 @FormParam("order") Double order) {
+                                @FormParam("waypoint_id") String waypointId,
+                                @FormParam("latitude") Double waypointLatitude,
+                                @FormParam("longitude") Double waypointLongitude,
+                                @FormParam("ordinal") Double ordinal,
+                                @FormParam("checkpoint") Boolean checkpoint) {
         System.out.println("Adding Waypoint: " + waypointId);
 
         Map<String, Object> waypoint = new HashMap<>();
@@ -254,7 +273,8 @@ public class BeeServer {
         waypoint.put("route_id", routeId);
         waypoint.put("latitude", waypointLatitude);
         waypoint.put("longitude", waypointLongitude);
-        waypoint.put("ordinal", order);
+        waypoint.put("ordinal", ordinal);
+        waypoint.put("checkpoint", checkpoint);
 
         String error = database.updateTable("waypoints", waypoint);
 
@@ -284,13 +304,30 @@ public class BeeServer {
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Path("e-m/add-location")
-    public Response addLocation(@FormParam("location_id") String eventId,
+    public Response addLocation(@FormParam("location_id") String location_id,
                                 @FormParam("name") String name,
                                 @FormParam("type") String type,
                                 @FormParam("info") String info,
                                 @FormParam("latitude") double latitude,
                                 @FormParam("longitude") double longitude) {
 
+        System.out.println("Adding Location: " + location_id);
+        System.out.println(location_id + ", " + name + ", " + type + ", " + info + ", " + latitude + ", " + longitude);
+
+        Map<String, Object> location = new HashMap<>();
+        location.put("location_id", location_id);
+        location.put("name", name);
+        location.put("type", type);
+        location.put("info", info);
+        location.put("latitude", latitude);
+        location.put("longitude", longitude);
+
+        String error = database.updateTable("locations", location);
+
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
         return Response.status(200).build();
     }
 

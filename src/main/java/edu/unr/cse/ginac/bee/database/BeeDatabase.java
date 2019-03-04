@@ -3,7 +3,9 @@ package edu.unr.cse.ginac.bee.database;
 import edu.unr.cse.ginac.bee.server.BeeServer;
 import edu.unr.cse.ginac.bee.types.Coordinate;
 import edu.unr.cse.ginac.bee.types.Event;
+import edu.unr.cse.ginac.bee.types.Location;
 import edu.unr.cse.ginac.bee.types.Route;
+import edu.unr.cse.ginac.bee.types.Waypoint;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -164,6 +166,7 @@ public class BeeDatabase {
                     "latitude float NOT NULL," +
                     "longitude float NOT NULL," +
                     "event_id varchar(36) NOT NULL," +
+                    "ordinal int NOT NULL," +
                     "PRIMARY KEY (bound_coord_id)," +
                     "FOREIGN KEY (event_id)" +
                     " REFERENCES events(event_id)" +
@@ -217,6 +220,7 @@ public class BeeDatabase {
                     "longitude float NOT NULL," +
                     "route_id varchar(36) NOT NULL," +
                     "ordinal int NOT NULL," +
+                    "checkpoint bool NOT NULL," +
                     "PRIMARY KEY (waypoint_id)," +
                     "FOREIGN KEY (route_id)" +
                     " REFERENCES routes(route_id)" +
@@ -426,11 +430,17 @@ public class BeeDatabase {
 
                     while (waypointResults.next()) {
                         System.out.println("waypoint " + waypointResults.getInt("ordinal"));
+                        Waypoint newWaypoint = new Waypoint();
                         Coordinate newCoordinate = new Coordinate();
                         newCoordinate.latitude = waypointResults.getDouble("latitude");
                         newCoordinate.longitude = waypointResults.getDouble("longitude");
 
-                        newRoute.waypoints.add(newCoordinate);
+                        newWaypoint.waypoint_id = waypointResults.getString("waypoint_id");
+                        newWaypoint.coordinate = newCoordinate;
+                        newWaypoint.route_id = waypointResults.getString("route_id");
+                        newWaypoint.ordinal = waypointResults.getInt("ordinal");
+                        newWaypoint.checkpoint = waypointResults.getBoolean("checkpoint");
+                        newRoute.waypoints.add(newWaypoint);
                     }
 
                     waypointStatement.close();
@@ -438,7 +448,7 @@ public class BeeDatabase {
                 }
                 routeStatement.close();
 
-                String boundaries = "SELECT * FROM bound_coords WHERE event_id = \"" + newEvent.eventId + "\"";
+                String boundaries = "SELECT * FROM bound_coords WHERE event_id = \"" + newEvent.eventId + "\" ORDER BY ordinal";
                 Statement boundaryStatement = dbConnection.createStatement();
                 ResultSet boundaryResult = boundaryStatement.executeQuery(boundaries);
 
@@ -459,6 +469,46 @@ public class BeeDatabase {
             selectStatement.close();
 
             return eventList;
+        }
+        catch (Exception ex) {
+            System.out.println(ex.toString());
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public List<Location> getAllLocations() {
+        System.out.println("Getting Locations.");
+        String locations = "SELECT * FROM locations";
+
+        List<Location> locationList = new ArrayList<>();
+        try {
+            Statement selectStatement = dbConnection.createStatement();
+            selectStatement.addBatch(locations);
+
+            ResultSet results = selectStatement.executeQuery(locations);
+
+            while (results.next()) {
+                System.out.println("location!");
+                Location newLocation = new Location();
+                newLocation.locationId = results.getString("location_id");
+                newLocation.type = results.getString("type");
+                newLocation.name = results.getString("name");
+                newLocation.info = results.getString("info");
+
+                Coordinate newCoordinate = new Coordinate();
+                newCoordinate.latitude = results.getDouble("latitude");
+                newCoordinate.longitude = results.getDouble("longitude");
+
+                newLocation.coordinate = newCoordinate;
+
+                locationList.add(newLocation);
+            }
+
+            selectStatement.close();
+
+            return locationList;
         }
         catch (Exception ex) {
             System.out.println(ex.toString());

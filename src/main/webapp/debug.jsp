@@ -276,13 +276,15 @@
         <td>latitude</td>
         <td>longitude</td>
         <td>route_id</td>
+        <td>ordinal</td>
+        <td>checkpoint?</td>
     </tr>
 <%
     try {
         conn = DriverManager.getConnection(jdbcUrl);
 
         readStatement = conn.createStatement();
-        resultSet = readStatement.executeQuery("SELECT waypoint_id, latitude, longitude, route_id FROM waypoints;");
+        resultSet = readStatement.executeQuery("SELECT waypoint_id, latitude, longitude, route_id, ordinal, checkpoint FROM waypoints order by checkpoint, ordinal;");
 
         while (resultSet.next()) {
         %>
@@ -291,6 +293,8 @@
                 <td><%=resultSet.getFloat("latitude")%></td>
                 <td><%=resultSet.getFloat("longitude")%></td>
                 <td><%=resultSet.getString("route_id")%></td>
+                <td><%=resultSet.getInt("ordinal")%></td>
+                <td><%=resultSet.getBoolean("checkpoint")%></td>
             </tr>
         <%
         }
