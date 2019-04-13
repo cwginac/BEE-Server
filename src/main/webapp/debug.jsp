@@ -31,65 +31,41 @@
 <body>
 <table border="2">
     <tr>
-        <td>userId</td>
-        <td>latitude</td>
-        <td>longitude</td>
-    </tr>
-    <%
-    try {
-        conn = DriverManager.getConnection(jdbcUrl);
-
-        readStatement = conn.createStatement();
-        resultSet = readStatement.executeQuery("SELECT id, latitude, longitude FROM users;");
-
-        while (resultSet.next()) {
-        %>
-            <tr>
-                <td><%=resultSet.getString("id")%></td>
-                <td><%=resultSet.getFloat("latitude")%></td>
-                <td><%=resultSet.getFloat("longitude")%></td>
-            </tr>
-        <%
-        }
-        %>
-
-</table>
-        <%
-
-        resultSet.close();
-        readStatement.close();
-        conn.close();
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-    }
-%>
-<br>
-<table border="2">
-    <tr>
+        <td>name</td>
         <td>userId</td>
         <td>evacId</td>
+        <td>notification_sent</td>
+        <td>notification_sent_at</td>
         <td>acknowledged</td>
+        <td>acknowledged_at</td>
         <td>safe</td>
+        <td>marked_safe_at</td>
         <td>latitude</td>
         <td>longitude</td>
+        <td>location_updated_at</td>
     </tr>
 <%
     try {
         conn = DriverManager.getConnection(jdbcUrl);
 
         readStatement = conn.createStatement();
-        resultSet = readStatement.executeQuery("SELECT user_id, evac_id, acknowledged, safe, latitude, longitude FROM evacuee;");
+        resultSet = readStatement.executeQuery("SELECT * FROM evacuee;");
 
         while (resultSet.next()) {
         %>
             <tr>
+                <td><%=resultSet.getString("name")%></td>
                 <td><%=resultSet.getString("user_id")%></td>
                 <td><%=resultSet.getString("evac_id")%></td>
+                <td><%=resultSet.getBoolean("notification_sent")%></td>
+                <td><%=resultSet.getTime("notification_sent_at")%></td>
                 <td><%=resultSet.getBoolean("acknowledged")%></td>
+                <td><%=resultSet.getTime("acknowledged_at")%></td>
                 <td><%=resultSet.getBoolean("safe")%></td>
+                <td><%=resultSet.getTime("marked_safe_at")%></td>
                 <td><%=resultSet.getFloat("latitude")%></td>
                 <td><%=resultSet.getFloat("longitude")%></td>
+                <td><%=resultSet.getTime("location_updated_at")%></td>
             </tr>
         <%
         }
@@ -111,8 +87,10 @@
     <tr>
         <td>report_id</td>
         <td>reporter_id</td>
+        <td>reported_at</td>
         <td>evac_id</td>
         <td>type</td>
+        <td>info</td>
         <td>latitude</td>
         <td>longitude</td>
     </tr>
@@ -121,15 +99,17 @@
         conn = DriverManager.getConnection(jdbcUrl);
 
         readStatement = conn.createStatement();
-        resultSet = readStatement.executeQuery("SELECT report_id, reporter_id, evac_id, type, latitude, longitude FROM evacuee;");
+        resultSet = readStatement.executeQuery("SELECT * FROM reports;");
 
         while (resultSet.next()) {
         %>
             <tr>
                 <td><%=resultSet.getString("report_id")%></td>
                 <td><%=resultSet.getString("reporter_id")%></td>
+                <td><%=resultSet.getTime("reported_at")%></td>
                 <td><%=resultSet.getString("evac_id")%></td>
                 <td><%=resultSet.getString("type")%></td>
+                <td><%=resultSet.getString("info")%></td>
                 <td><%=resultSet.getFloat("latitude")%></td>
                 <td><%=resultSet.getFloat("longitude")%></td>
             </tr>

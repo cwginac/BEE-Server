@@ -2,11 +2,13 @@ package edu.unr.cse.ginac.bee.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.unr.cse.ginac.bee.database.BeeDatabase;
+import edu.unr.cse.ginac.bee.types.Evacuee;
 import edu.unr.cse.ginac.bee.types.Event;
 import edu.unr.cse.ginac.bee.types.Location;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class BeeServer {
 
     private static final Log LOG = LogFactory.getLog(BeeServer.class);
 
-    BeeDatabase database = new BeeDatabase();
+    private final BeeDatabase database = new BeeDatabase();
 
     public BeeServer() {
     }
@@ -88,6 +90,8 @@ public class BeeServer {
         parameters.put("user_id", userId);
         parameters.put("evac_id", evacId);
         parameters.put("acknowledged", true);
+        parameters.put("acknowledged_at", Timestamp.valueOf(LocalDateTime.now()));
+
 
         String error = database.updateTable("evacuee", parameters);
 
@@ -101,6 +105,7 @@ public class BeeServer {
     @Consumes("application/x-www-form-urlencoded")
     @Path("/evacuation-update-location")
     public Response evacuationUpdateLocation(@FormParam("userId") String userId,
+                                             @FormParam("name") String name,
                                              @FormParam("evacId") String evacId,
                                              @FormParam("latitude") double latitude,
                                              @FormParam("longitude") double longitude) {
@@ -108,9 +113,11 @@ public class BeeServer {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("user_id", userId);
+        parameters.put("name", name);
         parameters.put("evac_id", evacId);
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
+        parameters.put("location_updated_at", Timestamp.valueOf(LocalDateTime.now()));
 
         String error = database.updateTable("evacuee", parameters);
 
@@ -124,14 +131,14 @@ public class BeeServer {
     @Consumes("application/x-www-form-urlencoded")
     @Path("/evacuation-safe")
     public Response evacuationSafe(@FormParam("userId") String userId,
-                                   @FormParam("evacId") String evacId,
-                                   @FormParam("safe") boolean safe) {
+                                   @FormParam("evacId") String evacId) {
         System.out.println("User: " + userId + " marked safe for evacuation: " + evacId);
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("user_id", userId);
         parameters.put("evac_id", evacId);
-        parameters.put("safe", safe);
+        parameters.put("safe", true);
+        parameters.put("marked_safe_at", Timestamp.valueOf(LocalDateTime.now()));
 
         String error = database.updateTable("evacuee", parameters);
 
@@ -148,11 +155,12 @@ public class BeeServer {
                                    @FormParam("latitude") double latitude,
                                    @FormParam("longitude") double longitude) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("id", id);
+        parameters.put("user_id", id);
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
+        parameters.put("location_updated_at", Timestamp.valueOf(LocalDateTime.now()));
 
-        String error = database.updateTable("user", parameters);
+        String error = database.updateTable("evacuee", parameters);
 
         if (error != null) {
             return Response.status(500).entity(error).build();
@@ -383,6 +391,28 @@ public class BeeServer {
         waypoint.put("longitude", 56.78);
         database.updateTable("waypoints", waypoint);
 
+
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Produces("text/json")
+    @Path("/e-m/push-notifications-for-event")
+    public Response pushNotificationsForEvent(@FormParam("event_id") String eventId,
+                                @FormParam("notification_title") String notificationTitle,
+                                @FormParam("notification_subtitle") String notificationSubtitle,
+                                @FormParam("notification_text") String notificationText) {
+        List<Evacuee> evacuees = database.getEvacueesByEvent(eventId);
+
+        List<String> deviceIds = new ArrayList<>();
+
+        for (Evacuee evacuee: evacuees) {
+            deviceIds.add(evacuee.userId);
+        }
+
+        BEEPushNotification pushNotification = new BEEPushNotification(deviceIds, notificationTitle,
+                notificationSubtitle, notificationText, database);
+        pushNotification.push();
 
         return Response.status(200).build();
     }

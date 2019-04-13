@@ -209,12 +209,7 @@ function updateRoute(route, directions) {
     route.waypoints.push(waypoint);
   });
 
-  while (route.waypoints.length > 24) {
-    route.waypoints.splice(Math.floor(Math.random() * route.waypoints.length), 1);
-  }
-
-  route.waypoints.forEach(function (element, index) {
-    element.order = index;
+  route.waypoints.forEach(function (element) {
     if (!local) {
       element.transmitData();
     }
@@ -308,6 +303,10 @@ function displayEvent(event) {
   showEvent += "<textarea rows='20' cols='50' id='instructions'></textarea>";
   showEvent += "</p>";
 
+  showEvent += "<p>";
+  showEvent += "<button type='button' id='PushNotification'>Push Notifications</button>";
+  showEvent += "</p>";
+
   showEvent += "<p id='routeInfo'>";
   showEvent += "</p>";
 
@@ -332,6 +331,41 @@ function displayEvent(event) {
     if (!local) { 
       event.transmitData(); 
     }
+  });
+
+  $("#PushNotification").click(function () {
+    var push_notification = {
+      event_id: event.event_id,
+      notification_title: "Evacuation Order",
+      notification_subtitle: "An Evacuation Has Been Ordered For Your Area.",
+      notification_text: "Open BEE for more information."
+    };
+  
+    var XHR = new XMLHttpRequest();
+    var urlEncodedData = "";
+    var urlEncodedDataPairs = [];
+    var name;
+  
+    // Turn the data object into an array of URL-encoded key/value pairs.
+    for(name in push_notification) {
+      urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(push_notification[name]));
+    }
+  
+    // Combine the pairs into a single string and replace all %-encoded spaces to 
+    // the '+' character; matches the behaviour of browser form submissions.
+    urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+
+    console.log(urlEncodedData);
+  
+    // Set up our request
+    XHR.open('POST', 'http://bee-server.us-west-1.elasticbeanstalk.com/web-service/bee-server/e-m/push-notifications-for-event');
+  
+    // Add the required HTTP header for form data POST requests
+    XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  
+    // Finally, send our data.
+    XHR.send(urlEncodedData);
+
   });
 }
 
