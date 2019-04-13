@@ -5,6 +5,7 @@ import edu.unr.cse.ginac.bee.database.BeeDatabase;
 import edu.unr.cse.ginac.bee.types.Evacuee;
 import edu.unr.cse.ginac.bee.types.Event;
 import edu.unr.cse.ginac.bee.types.Location;
+import edu.unr.cse.ginac.bee.types.Report;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -174,10 +176,26 @@ public class BeeServer {
     public Response report(@FormParam("userId") String userId,
                            @FormParam("evacId") String evacId,
                            @FormParam("type") String type,
+                           @FormParam("info") String info,
                            @FormParam("latitude") double latitude,
                            @FormParam("longitude") double longitude) {
 
 
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("report_id", UUID.randomUUID().toString());
+        parameters.put("reporter_id", userId);
+        parameters.put("evac_id", evacId);
+        parameters.put("type", type);
+        parameters.put("info", info);
+        parameters.put("latitude", latitude);
+        parameters.put("longitude", longitude);
+        parameters.put("reported_at", Timestamp.valueOf(LocalDateTime.now()));
+
+        String error = database.updateTable("reports", parameters);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
         return Response.status(200).build();
     }
 
@@ -351,6 +369,22 @@ public class BeeServer {
 
         ObjectMapper mapper = new ObjectMapper();
         String response = mapper.writeValueAsString(events);
+
+        return Response.status(200).entity(response).build();
+    }
+
+    @GET
+    @Produces("text/json")
+    @Path("/e-m/get-reports")
+    public Response getEMReports() throws IOException {
+        List<Report> reports = database.getAllReports();
+
+        if (reports == null) {
+            return Response.status(500).build();
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String response = mapper.writeValueAsString(reports);
 
         return Response.status(200).entity(response).build();
     }

@@ -5,6 +5,7 @@ import edu.unr.cse.ginac.bee.types.Coordinate;
 import edu.unr.cse.ginac.bee.types.Evacuee;
 import edu.unr.cse.ginac.bee.types.Event;
 import edu.unr.cse.ginac.bee.types.Location;
+import edu.unr.cse.ginac.bee.types.Report;
 import edu.unr.cse.ginac.bee.types.Route;
 import edu.unr.cse.ginac.bee.types.Waypoint;
 import java.sql.Connection;
@@ -124,7 +125,7 @@ public class BeeDatabase {
             Statement setupStatement = dbConnection.createStatement();
             String createTable = "CREATE TABLE reports (" +
                     "report_id varchar(36) NOT NULL," +
-                    "reporter_id varchar(36) NOT NULL," +
+                    "reporter_id varchar(64) NOT NULL," +
                     "reported_at timestamp NOT NULL," +
                     "evac_id varchar(36) NOT NULL," +
                     "type varchar(100) NOT NULL," +
@@ -601,6 +602,49 @@ public class BeeDatabase {
             selectStatement.close();
 
             return locationList;
+        }
+        catch (Exception ex) {
+            System.out.println(ex.toString());
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public List<Report> getAllReports() {
+        System.out.println("Getting Reports.");
+        String locations = "SELECT * FROM reports";
+
+        List<Report> reportList = new ArrayList<>();
+        try {
+            Statement selectStatement = dbConnection.createStatement();
+            selectStatement.addBatch(locations);
+
+            ResultSet results = selectStatement.executeQuery(locations);
+
+            while (results.next()) {
+                System.out.println("report!");
+                Report newReport = new Report();
+                newReport.reportId = results.getString("report_id");
+                newReport.reporterId = results.getString("reporter_id");
+                newReport.evacId = results.getString("evac_id");
+                newReport.type = results.getString("type");
+                newReport.info = results.getString("info");
+
+
+
+                Coordinate newCoordinate = new Coordinate();
+                newCoordinate.latitude = results.getDouble("latitude");
+                newCoordinate.longitude = results.getDouble("longitude");
+
+                newReport.coordinate = newCoordinate;
+
+                reportList.add(newReport);
+            }
+
+            selectStatement.close();
+
+            return reportList;
         }
         catch (Exception ex) {
             System.out.println(ex.toString());

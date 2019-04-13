@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f80963c-f10c-45d2-8ef2-2093a4b8bf66" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_locationtech_jts_jts_core_1_16_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BEEPushNotification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Evacuee.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Certificates.p12" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BEE-Server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/BEE-Server.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Report.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/debug.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/debug.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -55,7 +47,7 @@
         <counts>
           <entry key="CLASS" value="9" />
           <entry key="HTML" value="2" />
-          <entry key="JAVA" value="33" />
+          <entry key="JAVA" value="36" />
           <entry key="JSON" value="4" />
           <entry key="JSP" value="2" />
           <entry key="JavaScript" value="4" />
@@ -72,7 +64,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="181" />
-          <entry key="JAVA" value="14617" />
+          <entry key="JAVA" value="15045" />
           <entry key="JSON" value="29" />
           <entry key="JSP" value="940" />
           <entry key="JavaScript" value="115" />
@@ -84,11 +76,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="140" column="81" selection-start-line="140" selection-start-column="81" selection-end-line="140" selection-end-column="81" />
+            <state relative-caret-position="522">
+              <caret line="386" column="59" selection-start-line="386" selection-start-column="59" selection-end-line="386" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -97,10 +89,37 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Report.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Location.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" selection-start-line="3" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="105" column="41" selection-start-line="105" selection-start-column="41" selection-end-line="105" selection-end-column="41" />
+            <state relative-caret-position="236">
+              <caret line="627" column="65" selection-start-line="627" selection-start-column="65" selection-end-line="627" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -152,36 +171,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/github/fernandospr/javapns-jdk16/2.3.1/javapns-jdk16-2.3.1.jar!/javapns/Push.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="60" column="38" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Waypoint.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="8" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="186">
@@ -203,7 +192,6 @@
     <findStrings>
       <find>tomcat</find>
       <find>latitude</find>
-      <find>report</find>
       <find>filter</find>
       <find>drop</find>
       <find>Event</find>
@@ -221,6 +209,7 @@
       <find>boundary!</find>
       <find>critical</find>
       <find>timestamp</find>
+      <find>report</find>
     </findStrings>
     <replaceStrings>
       <replace>ordinal</replace>
@@ -244,7 +233,6 @@
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeData.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Event.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/scripts/Emergency-Manager.js" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Location.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Waypoint.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Route.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/PushNotification.java" />
@@ -252,8 +240,10 @@
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Evacuee.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BEEPushNotification.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Location.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Report.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java" />
       </list>
     </option>
   </component>
@@ -431,7 +421,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555180862101" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555191626634" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -571,8 +561,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="18" y="23" width="1830" height="977" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22483222" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22483222" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -597,7 +588,7 @@
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="7" visible="true" weight="0.11633109" />
+      <window_info anchor="right" id="Maven Projects" order="7" visible="true" weight="0.11633109" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -695,24 +686,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Route.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -810,20 +787,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Coordinate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="105" column="41" selection-start-line="105" selection-start-column="41" selection-end-line="105" selection-end-column="41" />
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/types/Report.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="386" column="59" selection-start-line="386" selection-start-column="59" selection-end-line="386" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/server/BeeServer.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/unr/cse/ginac/bee/database/BeeDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="140" column="81" selection-start-line="140" selection-start-column="81" selection-end-line="140" selection-end-column="81" />
+        <state relative-caret-position="236">
+          <caret line="627" column="65" selection-start-line="627" selection-start-column="65" selection-end-line="627" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
