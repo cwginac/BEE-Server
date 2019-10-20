@@ -13,9 +13,6 @@ var directions = L.mapbox.directions();
 var featureGroup = L.featureGroup().addTo(map);
 
 var drawControl = new L.Control.Draw({
-  edit: {
-    featureGroup: featureGroup
-  },
   draw: {
     polygon: true,
     polyline: true,
@@ -34,7 +31,7 @@ var ShowEvacuee = L.Control.extend({
     var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
 
     container.style.backgroundColor = 'white';
-    container.style.backgroundImage = "url(button_icons/personInDanger.png)";
+    container.style.backgroundImage = "url(button_icons/person.png)";
     container.style.backgroundSize = "25px 25px";
     container.style.backgroundRepeat = "no-repeat";
     container.style.backgroundPosition = "center";
@@ -75,6 +72,31 @@ var ShowReports = L.Control.extend({
     return container;
   }
 });
+
+var ShowEvacueeList = L.Control.extend({
+options: {
+    position: 'topleft'
+    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+  },
+  onAdd: function (map) {
+    var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+
+    container.style.backgroundColor = 'white';
+    container.style.backgroundImage = "url(button_icons/list.png)";
+    container.style.backgroundSize = "25px 20px";
+    container.style.backgroundRepeat = "no-repeat";
+    container.style.backgroundPosition = "center";
+    container.style.width = '30px';
+    container.style.height = '30px';
+
+    container.onclick = function () {
+        window.location.href = 'evacueeList.jsp';
+    }
+    return container;
+  }
+});
+
+map.addControl(new ShowEvacueeList());
 
 var showingReports = false;
 map.addControl(new ShowReports());
