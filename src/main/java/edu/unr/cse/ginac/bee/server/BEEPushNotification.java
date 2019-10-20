@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
@@ -24,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 public class BEEPushNotification {
 
-    private List<String> deviceIds;
+    private Map<String, String> deviceIds;
     private String notificationTitle;
     private String notificationSubtitle;
     private String notificationText;
@@ -32,7 +31,7 @@ public class BEEPushNotification {
     private URL keystoreLocation = BEEPushNotification.class
             .getClassLoader().getResource("BEEPushCertificate.p12");
 
-    public BEEPushNotification(List<String> deviceIds, String notificationTitle, String notificationSubtitle,
+    public BEEPushNotification(Map<String, String> deviceIds, String notificationTitle, String notificationSubtitle,
                                String notificationText, BeeDatabase database) {
         this.deviceIds = deviceIds;
         this.notificationTitle = notificationTitle;
@@ -52,7 +51,7 @@ public class BEEPushNotification {
                     .build();
 
 
-            for (String deviceId: deviceIds) {
+            for (Map.Entry deviceId: deviceIds.entrySet()) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeZone(TimeZone.getTimeZone("PST"));
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -65,7 +64,7 @@ public class BEEPushNotification {
                 payloadBuilder.setAlertBody(notificationText);
 
                 final String payload = payloadBuilder.buildWithDefaultMaximumLength();
-                final String token = TokenUtil.sanitizeTokenString(deviceId);
+                final String token = TokenUtil.sanitizeTokenString(deviceId.getValue().toString());
 
                 System.out.println(payload);
 
@@ -82,7 +81,8 @@ public class BEEPushNotification {
                     if (pushNotificationResponse.isAccepted()) {
                         System.out.println("Push notification accepted by APNs gateway.");
                         Map<String, Object> notification_sent = new HashMap<>();
-                        notification_sent.put("user_id", deviceId);
+                        notification_sent.put("user_id", deviceId.getKey().toString());
+                        notification_sent.put("notification_token", deviceId.getValue().toString());
                         notification_sent.put("notification_sent", true);
                         notification_sent.put("notification_sent_at", Timestamp.valueOf(LocalDateTime.now()));
 

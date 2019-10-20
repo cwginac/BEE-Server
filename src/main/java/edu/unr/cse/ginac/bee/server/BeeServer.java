@@ -2,6 +2,7 @@ package edu.unr.cse.ginac.bee.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.unr.cse.ginac.bee.database.BeeDatabase;
+import edu.unr.cse.ginac.bee.types.BoundaryPoint;
 import edu.unr.cse.ginac.bee.types.Evacuee;
 import edu.unr.cse.ginac.bee.types.Event;
 import edu.unr.cse.ginac.bee.types.Location;
@@ -24,6 +25,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.util.GeometricShapeFactory;
 
 @Path("/bee-server")
 public class BeeServer {
@@ -32,8 +37,7 @@ public class BeeServer {
 
     private final BeeDatabase database = new BeeDatabase();
 
-    public BeeServer() {
-    }
+    public BeeServer() { }
 
     @GET
     @Produces("text/json")
@@ -41,11 +45,43 @@ public class BeeServer {
     public Response getEvents(@QueryParam("id") String id) throws IOException {
         System.out.println("Getting Events for: " + id);
 
-        List<Event> events = database.getAllEvents();
-        System.out.println(events.size());
+        List<Event> events = database.getAllEventsForId(id);
+        List<Evacuee> evacuees = database.getEvacueeById(id);
+
+        List<Event> eventsForEvacuee = new ArrayList<>();
+
+        if (evacuees.size() != 1) {
+            return Response.status(500).entity("Incorrect Evacuee ID").build();
+        }
+
+        final GeometryFactory gf = new GeometryFactory();
+        final GeometricShapeFactory gsf = new GeometricShapeFactory();
+        final org.locationtech.jts.geom.Coordinate evacueeCoordinate =
+                new org.locationtech.jts.geom.Coordinate(evacuees.get(0).location.longitude, evacuees.get(0).location.latitude);
+
+        gsf.setCentre(evacueeCoordinate);
+        gsf.setSize(1.0);
+        gsf.setNumPoints(360);
+        Geometry circle = gsf.createCircle();
+
+        for (Event event: events) {
+            for (BoundaryPoint boundaryPoint: event.boundaryPoints) {
+                final org.locationtech.jts.geom.Coordinate eventCoordinate =
+                        new org.locationtech.jts.geom.Coordinate(boundaryPoint.coordinate.longitude, boundaryPoint.coordinate.latitude);
+
+                final Point point = gf.createPoint(eventCoordinate);
+
+                if (point.within(circle)) {
+                    eventsForEvacuee.add(event);
+                    break;
+                }
+            }
+
+        }
+        System.out.println(eventsForEvacuee.size());
         ObjectMapper mapper = new ObjectMapper();
         String response = "{\"events\":";
-        response += mapper.writeValueAsString(events) + "}";
+        response += mapper.writeValueAsString(eventsForEvacuee) + "}";
 
         return Response.status(200).entity(response).build();
     }
@@ -110,7 +146,8 @@ public class BeeServer {
                                              @FormParam("name") String name,
                                              @FormParam("evacId") String evacId,
                                              @FormParam("latitude") double latitude,
-                                             @FormParam("longitude") double longitude) {
+                                             @FormParam("longitude") double longitude,
+                                             @FormParam("notification_token") String notificationToken) {
         System.out.println("User: " + userId + " updated location for evacuation: " + evacId);
 
         Map<String, Object> parameters = new HashMap<>();
@@ -120,6 +157,10 @@ public class BeeServer {
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
         parameters.put("location_updated_at", Timestamp.valueOf(LocalDateTime.now()));
+
+        if (notificationToken != null) {
+            parameters.put("notification_token", notificationToken);
+        }
 
         String error = database.updateTable("evacuee", parameters);
 
@@ -155,12 +196,17 @@ public class BeeServer {
     @Path("/update-location")
     public Response updateLocation(@FormParam("id") String id,
                                    @FormParam("latitude") double latitude,
-                                   @FormParam("longitude") double longitude) {
+                                   @FormParam("longitude") double longitude,
+                                   @FormParam("notification_token") String notificationToken) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("user_id", id);
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
         parameters.put("location_updated_at", Timestamp.valueOf(LocalDateTime.now()));
+
+        if (notificationToken != null) {
+            parameters.put("notification_token", notificationToken);
+        }
 
         String error = database.updateTable("evacuee", parameters);
 
@@ -223,6 +269,42 @@ public class BeeServer {
 
     @POST
     @Consumes("application/x-www-form-urlencoded")
+    @Path("/e-m/remove-event")
+    public Response removeEvent(@FormParam("event_id") String eventId) {
+        System.out.println("Removing Event: " + eventId);
+
+        Map<String, Object> event = new HashMap<>();
+        event.put("event_id", eventId);
+
+        String error = database.deleteFromTable("events", event);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
+
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("/e-m/remove-report")
+    public Response removeReport(@FormParam("report_id") String reportId) {
+        System.out.println("Removing Report: " + reportId);
+
+        Map<String, Object> report = new HashMap<>();
+        report.put("report_id", reportId);
+
+        String error = database.deleteFromTable("reports", report);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
+
+        return Response.status(200).build();
+    }
+
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
     @Path("/e-m/add-boundary")
     public Response addBoundary(@FormParam("event_id") String eventId,
                                 @FormParam("bound_coord_id") String boundaryIds,
@@ -275,7 +357,13 @@ public class BeeServer {
         Map<String, Object> route = new HashMap<>();
         route.put("route_id", routeId);
 
-        String error = database.deleteFromTable("routes", route);
+        String error = database.deleteFromTable("waypoints", route);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
+
+        error = database.deleteFromTable("routes", route);
 
         if (error != null) {
             return Response.status(500).entity(error).build();
@@ -357,6 +445,23 @@ public class BeeServer {
         return Response.status(200).build();
     }
 
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("/e-m/remove-location")
+    public Response removeLocation(@FormParam("location_id") String locationId) {
+        System.out.println("Removing location: " + locationId);
+
+        Map<String, Object> location = new HashMap<>();
+        location.put("location_id", locationId);
+
+        String error = database.deleteFromTable("locations", location);
+
+        if (error != null) {
+            return Response.status(500).entity(error).build();
+        }
+        return Response.status(200).build();
+    }
+
     @GET
     @Produces("text/json")
     @Path("/e-m/get-events")
@@ -373,6 +478,7 @@ public class BeeServer {
         return Response.status(200).entity(response).build();
     }
 
+
     @GET
     @Produces("text/json")
     @Path("/e-m/get-reports")
@@ -387,6 +493,18 @@ public class BeeServer {
         String response = mapper.writeValueAsString(reports);
 
         return Response.status(200).entity(response).build();
+    }
+
+    @GET
+    @Produces("text/json")
+    @Path("/e-m/get-locations")
+    public Response getEMLocations() throws IOException {
+
+        List<Location> locations = database.getAllLocations();
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        return Response.status(200).entity(mapper.writeValueAsString(locations)).build();
     }
 
     @GET
@@ -438,10 +556,10 @@ public class BeeServer {
                                 @FormParam("notification_text") String notificationText) {
         List<Evacuee> evacuees = database.getEvacueesByEvent(eventId);
 
-        List<String> deviceIds = new ArrayList<>();
+        Map<String, String> deviceIds = new HashMap<>();
 
         for (Evacuee evacuee: evacuees) {
-            deviceIds.add(evacuee.userId);
+            deviceIds.put(evacuee.userId, evacuee.notification_token);
         }
 
         BEEPushNotification pushNotification = new BEEPushNotification(deviceIds, notificationTitle,
@@ -449,5 +567,16 @@ public class BeeServer {
         pushNotification.push();
 
         return Response.status(200).build();
+    }
+
+    @GET
+    @Produces("text/json")
+    @Path("/e-m/get-evacuees")
+    public Response getEvacuees() throws IOException {
+
+        List<Evacuee> evacuees = database.getAllEvacuees();
+        ObjectMapper mapper = new ObjectMapper();
+
+        return Response.status(200).entity(mapper.writeValueAsString(evacuees)).build();
     }
 }

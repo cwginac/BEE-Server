@@ -1,5 +1,10 @@
-function Route(event_id) {
-    this.route_id = UuidUtility.create_UUID();;
+function Route(event_id, route_id) {
+    if (route_id == null) {
+        this.route_id = UuidUtility.create_UUID();
+    }
+    else {
+        this.route_id = route_id;
+    }
     this.event_id = event_id;
     this.status = "";
     this.last_update;
@@ -8,6 +13,8 @@ function Route(event_id) {
     this.checkpoints = []
 
     this.transmitData = function () {
+        this.removeFromDatabase()
+        
         var route = {
             route_id: this.route_id,
             event_id: this.event_id,
@@ -44,16 +51,20 @@ function Route(event_id) {
         // Finally, send our data.
         XHR.send(urlEncodedData);
 
-        this.waypoints.forEach(element => {
-            element.transmitData();
+        this.waypoints.forEach(function (element) {
+            if (!local) {
+                element.transmitData();
+            }
+        });
+
+        this.checkpoints.forEach(function (element) {
+            if (!local) {
+                element.transmitData();
+            }
         });
     };
 
     this.removeFromDatabase = function () {
-        this.waypoints.forEach(element => {
-            element.removeFromDatabase();
-        });
-
         var route = {
             route_id: this.route_id
         }
@@ -87,9 +98,5 @@ function Route(event_id) {
 
         // Finally, send our data.
         XHR.send(urlEncodedData);
-
-        this.waypoints.forEach(element => {
-            element.transmitData();
-        });
     };
 }

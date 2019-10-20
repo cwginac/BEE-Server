@@ -1,6 +1,7 @@
 package edu.unr.cse.ginac.bee.database;
 
 import edu.unr.cse.ginac.bee.server.BeeServer;
+import edu.unr.cse.ginac.bee.types.BoundaryPoint;
 import edu.unr.cse.ginac.bee.types.Coordinate;
 import edu.unr.cse.ginac.bee.types.Evacuee;
 import edu.unr.cse.ginac.bee.types.Event;
@@ -93,6 +94,7 @@ public class BeeDatabase {
             Statement setupStatement = dbConnection.createStatement();
             String createTable = "CREATE TABLE evacuee (" +
                     "user_id varchar(64) NOT NULL," +
+                    "notification_token varchar(65)," +
                     "evac_id varchar(36)," +
                     "notification_sent boolean DEFAULT FALSE," +
                     "notification_sent_at timestamp," +
@@ -411,6 +413,9 @@ public class BeeDatabase {
         System.out.println("Getting Events.");
         String events = "SELECT * FROM events";
 
+        final GeometryFactory gf = new GeometryFactory();
+        final ArrayList<org.locationtech.jts.geom.Coordinate> points = new ArrayList<>();
+
         List<Event> eventList = new ArrayList<>();
         try {
             Statement selectStatement = dbConnection.createStatement();
@@ -425,7 +430,7 @@ public class BeeDatabase {
                 newEvent.severity = results.getString("severity");
                 newEvent.instructions = results.getString("instructions");
                 newEvent.lastUpdate = results.getTimestamp("last_update");
-                newEvent.inUsersArea = true;
+                newEvent.inUsersArea = false;
 
                 String routes = "SELECT * FROM routes WHERE event_id = \"" + newEvent.eventId + "\"";
                 Statement routeStatement = dbConnection.createStatement();
@@ -465,14 +470,138 @@ public class BeeDatabase {
                 ResultSet boundaryResult = boundaryStatement.executeQuery(boundaries);
 
                 while (boundaryResult.next()) {
+                    BoundaryPoint newBoundaryPoint = new BoundaryPoint();
                     Coordinate newCoordinate = new Coordinate();
                     newCoordinate.latitude = boundaryResult.getDouble("latitude");
                     newCoordinate.longitude = boundaryResult.getDouble("longitude");
 
-                    newEvent.boundaryPoints.add(newCoordinate);
+                    newBoundaryPoint.bound_coord_id = boundaryResult.getString("bound_coord_id");
+                    newBoundaryPoint.ordinal = boundaryResult.getInt("ordinal");
+                    newBoundaryPoint.event_id = boundaryResult.getString("event_id");
+                    newBoundaryPoint.coordinate = newCoordinate;
+
+                    newEvent.boundaryPoints.add(newBoundaryPoint);
                 }
 
                 boundaryStatement.close();
+
+                eventList.add(newEvent);
+            }
+
+            selectStatement.close();
+
+            return eventList;
+        }
+        catch (Exception ex) {
+            System.out.println(ex.toString());
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public List<Event> getAllEventsForId(String userId) {
+        System.out.println("Getting Events for id: " + userId);
+        String events = "SELECT * FROM events";
+
+        final GeometryFactory gf = new GeometryFactory();
+        final ArrayList<org.locationtech.jts.geom.Coordinate> points = new ArrayList<>();
+
+        List<Event> eventList = new ArrayList<>();
+        try {
+            Statement selectStatement = dbConnection.createStatement();
+            selectStatement.addBatch(events);
+
+            ResultSet results = selectStatement.executeQuery(events);
+
+            while (results.next()) {
+                Event newEvent = new Event();
+                newEvent.eventId = results.getString("event_id");
+                newEvent.type = results.getString("type");
+                newEvent.severity = results.getString("severity");
+                newEvent.instructions = results.getString("instructions");
+                newEvent.lastUpdate = results.getTimestamp("last_update");
+                newEvent.inUsersArea = false;
+
+                String routes = "SELECT * FROM routes WHERE event_id = \"" + newEvent.eventId + "\"";
+                Statement routeStatement = dbConnection.createStatement();
+                ResultSet routeResults = routeStatement.executeQuery(routes);
+
+                while (routeResults.next()) {
+                    Route newRoute = new Route();
+                    newRoute.routeId = routeResults.getString("route_id");
+                    newRoute.status = routeResults.getString("status");
+                    newRoute.lastUpdate = routeResults.getTimestamp("last_update");
+
+                    String waypoints = "SELECT * FROM waypoints WHERE route_id = \"" + newRoute.routeId + "\" ORDER BY ordinal";
+                    Statement waypointStatement = dbConnection.createStatement();
+                    ResultSet waypointResults = waypointStatement.executeQuery(waypoints);
+
+                    while (waypointResults.next()) {
+                        Waypoint newWaypoint = new Waypoint();
+                        Coordinate newCoordinate = new Coordinate();
+                        newCoordinate.latitude = waypointResults.getDouble("latitude");
+                        newCoordinate.longitude = waypointResults.getDouble("longitude");
+
+                        newWaypoint.waypoint_id = waypointResults.getString("waypoint_id");
+                        newWaypoint.coordinate = newCoordinate;
+                        newWaypoint.route_id = waypointResults.getString("route_id");
+                        newWaypoint.ordinal = waypointResults.getInt("ordinal");
+                        newWaypoint.checkpoint = waypointResults.getBoolean("checkpoint");
+                        newRoute.waypoints.add(newWaypoint);
+                    }
+
+                    waypointStatement.close();
+                    newEvent.routes.add(newRoute);
+                }
+                routeStatement.close();
+
+                String boundaries = "SELECT * FROM bound_coords WHERE event_id = \"" + newEvent.eventId + "\" ORDER BY ordinal";
+                Statement boundaryStatement = dbConnection.createStatement();
+                ResultSet boundaryResult = boundaryStatement.executeQuery(boundaries);
+
+                while (boundaryResult.next()) {
+                    BoundaryPoint newBoundaryPoint = new BoundaryPoint();
+                    Coordinate newCoordinate = new Coordinate();
+                    newCoordinate.latitude = boundaryResult.getDouble("latitude");
+                    newCoordinate.longitude = boundaryResult.getDouble("longitude");
+
+                    newBoundaryPoint.bound_coord_id = boundaryResult.getString("bound_coord_id");
+                    newBoundaryPoint.ordinal = boundaryResult.getInt("ordinal");
+                    newBoundaryPoint.event_id = boundaryResult.getString("event_id");
+                    newBoundaryPoint.coordinate = newCoordinate;
+
+                    newEvent.boundaryPoints.add(newBoundaryPoint);
+                }
+
+                boundaryStatement.close();
+
+                points.clear();
+                for (BoundaryPoint boundaryPoint : newEvent.boundaryPoints) {
+                    points.add(new org.locationtech.jts.geom.Coordinate(boundaryPoint.coordinate.longitude, boundaryPoint.coordinate.latitude));
+                }
+
+                points.add(points.get(0));
+
+                final Polygon polygon = gf.createPolygon(new LinearRing(new CoordinateArraySequence(points
+                        .toArray(new org.locationtech.jts.geom.Coordinate[0])), gf), null);
+
+                List<Evacuee> evacuees = getEvacueeById(userId);
+
+                for (Evacuee evacuee: evacuees) {
+                    final org.locationtech.jts.geom.Coordinate evacueeCoordinate =
+                            new org.locationtech.jts.geom.Coordinate(evacuee.location.longitude, evacuee.location.latitude);
+
+                    final Point point = gf.createPoint(evacueeCoordinate);
+
+                    if (point.within(polygon)) {
+                        newEvent.inUsersArea = true;
+
+                        System.out.println(polygon.toString());
+                        System.out.println(evacueeCoordinate.toString());
+                    }
+
+                }
 
                 eventList.add(newEvent);
             }
@@ -547,11 +676,17 @@ public class BeeDatabase {
                 ResultSet boundaryResult = boundaryStatement.executeQuery(boundaries);
 
                 while (boundaryResult.next()) {
+                    BoundaryPoint newBoundaryPoint = new BoundaryPoint();
                     Coordinate newCoordinate = new Coordinate();
                     newCoordinate.latitude = boundaryResult.getDouble("latitude");
                     newCoordinate.longitude = boundaryResult.getDouble("longitude");
 
-                    newEvent.boundaryPoints.add(newCoordinate);
+                    newBoundaryPoint.bound_coord_id = boundaryResult.getString("bound_coord_id");
+                    newBoundaryPoint.ordinal = boundaryResult.getInt("ordinal");
+                    newBoundaryPoint.event_id = boundaryResult.getString("event_id");
+                    newBoundaryPoint.coordinate = newCoordinate;
+
+                    newEvent.boundaryPoints.add(newBoundaryPoint);
                 }
 
                 boundaryStatement.close();
@@ -668,15 +803,65 @@ public class BeeDatabase {
             while (results.next()) {
                 Evacuee newEvacuee = new Evacuee();
                 newEvacuee.userId = results.getString("user_id");
+                newEvacuee.notification_token = results.getString("notification_token");
                 newEvacuee.evacId = results.getString("evac_id");
+                newEvacuee.notificationSent = results.getBoolean("notification_sent");
+                newEvacuee.notificationSentAt = results.getTimestamp("notification_sent_at");
                 newEvacuee.acknowledged = results.getBoolean("acknowledged");
+                newEvacuee.acknowledgedAt = results.getTimestamp("acknowledged_at");
                 newEvacuee.safe = results.getBoolean("safe");
+                newEvacuee.markedSafeAt = results.getTimestamp("marked_safe_at");
 
                 Coordinate newCoordinate = new Coordinate();
                 newCoordinate.latitude = results.getDouble("latitude");
                 newCoordinate.longitude = results.getDouble("longitude");
 
                 newEvacuee.location = newCoordinate;
+                newEvacuee.locationUpdatedLastAt = results.getTimestamp("location_updated_at");
+
+                evacuees.add(newEvacuee);
+            }
+
+            selectStatement.close();
+
+            return evacuees;
+        }
+        catch (Exception ex) {
+            System.out.println(ex.toString());
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public List<Evacuee> getEvacueeById(String userId) {
+        List<Evacuee> evacuees = new ArrayList<>();
+
+        String evacuee = "SELECT * FROM evacuee WHERE user_id = \"" + userId + "\"";
+
+        try {
+            Statement selectStatement = dbConnection.createStatement();
+            selectStatement.addBatch(evacuee);
+
+            ResultSet results = selectStatement.executeQuery(evacuee);
+
+            while (results.next()) {
+                Evacuee newEvacuee = new Evacuee();
+                newEvacuee.userId = results.getString("user_id");
+                newEvacuee.evacId = results.getString("evac_id");
+                newEvacuee.notificationSent = results.getBoolean("notification_sent");
+                newEvacuee.notificationSentAt = results.getTimestamp("notification_sent_at");
+                newEvacuee.acknowledged = results.getBoolean("acknowledged");
+                newEvacuee.acknowledgedAt = results.getTimestamp("acknowledged_at");
+                newEvacuee.safe = results.getBoolean("safe");
+                newEvacuee.markedSafeAt = results.getTimestamp("marked_safe_at");
+
+                Coordinate newCoordinate = new Coordinate();
+                newCoordinate.latitude = results.getDouble("latitude");
+                newCoordinate.longitude = results.getDouble("longitude");
+
+                newEvacuee.location = newCoordinate;
+                newEvacuee.locationUpdatedLastAt = results.getTimestamp("location_updated_at");
 
                 evacuees.add(newEvacuee);
             }
@@ -706,8 +891,8 @@ public class BeeDatabase {
             final GeometryFactory gf = new GeometryFactory();
             final ArrayList<org.locationtech.jts.geom.Coordinate> points = new ArrayList<>();
 
-            for (Coordinate coordinate : events.get(0).boundaryPoints) {
-                points.add(new org.locationtech.jts.geom.Coordinate(coordinate.longitude, coordinate.latitude));
+            for (BoundaryPoint boundaryPoint : events.get(0).boundaryPoints) {
+                points.add(new org.locationtech.jts.geom.Coordinate(boundaryPoint.coordinate.longitude, boundaryPoint.coordinate.latitude));
             }
 
             points.add(points.get(0));

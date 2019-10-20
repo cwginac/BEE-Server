@@ -13,7 +13,7 @@ public class Event {
     public boolean inUsersArea;
 
     public List<Route> routes;
-    public List<Coordinate> boundaryPoints;
+    public List<BoundaryPoint> boundaryPoints;
 
     public Event() {
         routes = new ArrayList<>();

@@ -33,6 +33,7 @@
     <tr>
         <td>name</td>
         <td>userId</td>
+        <td>notification_token</td>
         <td>evacId</td>
         <td>notification_sent</td>
         <td>notification_sent_at</td>
@@ -56,6 +57,7 @@
             <tr>
                 <td><%=resultSet.getString("name")%></td>
                 <td><%=resultSet.getString("user_id")%></td>
+                <td><%=resultSet.getString("notification_token")%></td>
                 <td><%=resultSet.getString("evac_id")%></td>
                 <td><%=resultSet.getBoolean("notification_sent")%></td>
                 <td><%=resultSet.getTime("notification_sent_at")%></td>

@@ -6,5 +6,4 @@ public class Location {
     public String name;
     public String info;
     public Coordinate coordinate;
-
 }

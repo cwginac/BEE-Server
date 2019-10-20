@@ -10,8 +10,7 @@
         <link href='https://api.mapbox.com/mapbox.js/plugins/mapbox-directions.js/v0.4.0/mapbox.directions.css' rel='stylesheet' type='text/css' />
         <style>
               body { margin:0; padding:0; }
-              #map { position:absolute; left: 0; top:0; bottom:0; width:80%; }
-              .info_pane {position: absolute; top:0; right:0; width:20%}
+              #map { position:absolute; left: 0; top:0; bottom:0; width:100%; }
               .formfield * {vertical-align: middle; }
         </style>
     </head>
@@ -20,15 +19,20 @@
         <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.js'></script>
         <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
         <div id='map'></div>
-        <div class='info_pane'></div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="scripts/Emergency-Manager.js"></script>
+        
+        <script src="scripts/Types/Evacuee.js"></script>
         <script src="scripts/Types/Event.js"></script>
         <script src="scripts/Types/BoundaryCoord.js"></script>
         <script src="scripts/Types/Route.js"></script>
+        <script src="scripts/Types/Report.js"></script>
         <script src="scripts/Types/Waypoint.js"></script>
         <script src="scripts/Types/Location.js"></script>
         <script src="scripts/UuidUtility.js"></script>
         <script src="scripts/polyline.js"></script>
+        
+        <script src="scripts/AddEvent.js"></script>
+        <script src="scripts/AddRoute.js"></script>
+        <script src="scripts/Emergency-Manager.js"></script>
     </body>
 </html>
