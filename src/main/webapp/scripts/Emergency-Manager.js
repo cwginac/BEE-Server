@@ -2,7 +2,7 @@
 L.mapbox.accessToken = 'pk.eyJ1IjoiY3dnaW5hYyIsImEiOiJjanBrNzV0b3MwMGM3NDltbGFkNXRoeGs5In0.IPKWBAfhpSTHopPUrFWGUQ';
 
 // Launch Map (no user location due to no HTTPS)
-var map = L.mapbox.map('map', 'mapbox.streets').setView([39.5296, -119.8138], 12);
+var map = L.mapbox.map('map', 'mapbox.streets').setView([39.7597, -121.6219], 12);
 
 var activeEvent = {}
 var activeRoute = {}
